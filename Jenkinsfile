@@ -58,6 +58,14 @@ pipeline {
                 """
             }
         }
+
+        stage('sonar-scan') {
+            steps {
+                sh """
+                    sonar-scanner
+                """
+            }
+        }
         stage('Publish Artifact') {
             steps {
                  nexusArtifactUploader(
