@@ -25,7 +25,7 @@ pipeline {
     }
     // build
     stages {
-        stage('Get the version') {
+        stage("Get the version") {
             steps {
                 script {
                     def packageJson = readJSON file: 'package.json'
@@ -34,14 +34,14 @@ pipeline {
                 }
             }
         }
-        stage('Install dependencies') {
+        stage("Install dependencies") {
             steps {
                 sh """
                     npm install
                 """
             }
         }
-        stage('Unit tests') {
+        stage("Unit tests") {
             steps {
                 sh """
                     echo "unit tests will run here"
@@ -49,7 +49,15 @@ pipeline {
             }
         }
         
-        stage('Build') {
+        stage("Sonar-scan") {
+            steps {
+                sh """
+                    sonar-scanner
+                """
+            }
+        }
+
+        stage("Build") {
             steps {
                 sh """
                     ls -la
@@ -59,13 +67,6 @@ pipeline {
             }
         }
 
-        stage('sonar-scan') {
-            steps {
-                sh """
-                    sonar-scanner
-                """
-            }
-        }
         stage('Publish Artifact') {
             steps {
                  nexusArtifactUploader(
